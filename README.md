@@ -1,20 +1,22 @@
 # {ATAM} Active Transport Analytics Model
-- Active Transport Analytics Model (“ATAM”) is a new strategic transport modelling and data visualization framework for Active Transport (“AT”) (i.e. cycling and walking modes) as well as emerging micro-mobility modes 
+**Overview of ATAM**
+- **Active Transport Analytics Model ("ATAM")** is a new strategic transport modelling and data visualization framework for Active Transport **(“AT”)** (i.e. cycling and walking modes) as well as emerging micro-mobility modes 
 
-- Open / open-source modelling philosophy
-  - Core model uses open-source tools, mainly Python and Jupyter notebooks and QGIS
-  - Demo/example model code and data is available freely on GitHub here
-  - Demos are provided to serve as examples to implement the modelling framework in other cities
+- **Proof of Concept (“POC”)** model developed for cycling in Brisbane, QLD Australia
 
-- Model structure and outputs. 
-  - Networks – detailed networks that can be built from many sources including OpenStreetMap (“OSM”) are a model input, and which consider factors such as safety to AT users. Future network changes can be tested for project appraisal. 
-  - Demand – base year demand matrices are an input and are ‘matrix estimated’ from multiple sources. Future demand is ‘growthed’ up based on demographics projections etc. Demand could be assigned from other strategic modelling tools. 
-  - Outputs – key outputs that ATAM can produce include: (i) volumes by link, (ii) journey times (by route and Origin-Destination (“OD”) matrix), (iii) analysis of trips using a particular link (i.e. Select Link Analysis (“SLA”))
+- **Model structure and outputs** - key features: 
+  - **Networks** – detailed networks, which consider factors such as safety to AT users, are a model input. Networks can be curated from sources including OpenStreetMap and other open data. Future scenario network changes can be tested for project appraisal.
+  - **Demand** – demand matrices are an input and base year demand can be estimated from available sources such as household travel surveys, counts, Strava data, mobility data or other strategic model outputs. Future demand could be estimated based on demographic projections or demand matrices could be re-assigned from other strategic modelling tools.
+  - **Outputs** – key outputs that ATAM can produce include: (i) volumes by link, (ii) journey times (by route and Origin-Destination **(“OD”)** matrix), (iii) analysis of trips using a particular link (i.e. Select Link Analysis **(“SLA”)**)
 
-- Proof of Concept (“POC”) model developed for cycling in Brisbane, QLD Australia
+- **ATAM is built on open-source tools and does not require proprietary transport**
+  - The core model functionality uses open-source tools - Python, Jupyter notebooks and QGIS (Tableau Public has been used to visualize data as well). No proprietary transport modelling software packages are required.
+  - Brisbane POC demo/example model code and data is openly available on GitHub (https://github.com/atam-analytics/atam) and serves as an example to implement the ATAM modelling framework in other regions
 
-- Next steps – improvements to the Brisbane POC model, develop POC models for other cities globally, build awareness and example use cases, feedback & improvement 
+- **Next steps** – improvements to the Brisbane POC model, develop POC models for other cities globally, build awareness and example use cases, feedback & improvement 
 
+**********************************************************************************************************************************************************
+**Further information about the project**
 - Learn more about the ATAM project here - http://atamanalytics.com/
-
 - See a visualised example of the type of outputs ATAM can produce for a single scenario - https://public.tableau.com/app/profile/peter.stephan/viz/ATAMBrisbanePOC11-Jan-22/VolumesStravastyling
+- Questions or would like to get involved in the project? Contact Peter Stephan @ https://github.com/peterstephan
