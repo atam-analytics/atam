@@ -15,6 +15,6 @@
 
 - Next steps – improvements to the Brisbane POC model, develop POC models for other cities globally, build awareness and example use cases, feedback & improvement 
 
-- Learn more about the ATAM project here - https://atam-analytics.github.io/
+- Learn more about the ATAM project here - http://atamanalytics.com/
 
 - See a visualised example of the type of outputs ATAM can produce for a single scenario - https://public.tableau.com/app/profile/peter.stephan/viz/ATAMBrisbanePOC11-Jan-22/VolumesStravastyling
