@@ -326,3 +326,31 @@ class Model:
         all_sla_links_fp = os.path.join(self.run_output_dir, 'sla_links.csv')
         self.all_sla_links_df.to_csv(all_sla_links_fp, index=False)      
         return self.all_sla_paths_df
+
+    
+    # Run accessibility analysis
+    def analyse_accessibility(self, zones_file):
+        
+        self.path_outputs_df = pd.DataFrame()
+        
+        for index, row in demand_df.iterrows():
+            origin_zone = row['origin_zone']
+            dest_zone = row['dest_zone']
+            demand = row['demand']
+            cost_attribute='cost_minutes'
+            print(index, ": orig=", origin_zone, ", dest=", dest_zone, ", demand=",demand)
+            try:
+                self.get_path(origin_zone, dest_zone, demand, cost_attribute)
+                self.path_outputs_df = pd.concat([self.path_outputs_df, self.last_path_output_df])
+            except:
+                print("    An error occurred skimming origin {}, destination {}".format(origin_zone, dest_zone))
+        
+        # Format output
+        self.path_outputs_df['od_pair'] = self.path_outputs_df['origin_zone'].astype(str) + "_" + self.path_outputs_df['dest_zone'].astype(str)
+        
+        # Export dataframe to CSV
+        path_output_csv_fp = os.path.join(self.run_output_dir, 'path_outputs.csv')
+        self.path_outputs_df.to_csv(path_output_csv_fp, index=False) 
+        print("Exported paths to ", path_output_csv_fp)
+        
+        return self.path_outputs_df
