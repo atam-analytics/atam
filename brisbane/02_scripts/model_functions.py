@@ -18,6 +18,7 @@ class Model:
         
         # Input files (set as placeholders)
         self.network_input_file = "" 
+        self.zone_input_file = "" 
         self.connectors_input_file = "" 
         self.walk_demand_input_file = "" 
         self.cycle_demand_input_file = "" 
@@ -329,28 +330,73 @@ class Model:
 
     
     # Run accessibility analysis
-    def analyse_accessibility(self, zones_file):
+    def analyse_accessibility(self):
+    
+        # Zones to analyse accessibility for
+        self.accessibility_zones_file = os.path.join(self.input_dir, '05_analysis', 'accessibility_analysis_zones.csv')
+        accessibility_zones_df = pd.read_csv(self.accessibility_zones_file)
+        
+        # All zones
+        zones_fp = os.path.join(self.input_dir, '01_zones', self.zone_input_file)
+        zones_df = pd.read_csv(zones_fp)
         
         self.path_outputs_df = pd.DataFrame()
         
-        for index, row in demand_df.iterrows():
-            origin_zone = row['origin_zone']
-            dest_zone = row['dest_zone']
-            demand = row['demand']
-            cost_attribute='cost_minutes'
-            print(index, ": orig=", origin_zone, ", dest=", dest_zone, ", demand=",demand)
-            try:
-                self.get_path(origin_zone, dest_zone, demand, cost_attribute)
-                self.path_outputs_df = pd.concat([self.path_outputs_df, self.last_path_output_df])
-            except:
-                print("    An error occurred skimming origin {}, destination {}".format(origin_zone, dest_zone))
-        
+        for index, row in accessibility_zones_df.iterrows():
+            analysis_zone_id = row['zone_id']
+            analysis_zone_description = row['zone_description']
+            
+            for index, row in zones_df.iterrows():
+                zone_id = row['zone_id']
+                cost_attribute='cost_minutes'
+                demand=0
+                print(index, ": analysis_zone_id=", analysis_zone_id, analysis_zone_description, ", zone_id=", zone_id)
+                try:
+                    # To Driection
+                    to_result_df = self.get_path(zone_id, analysis_zone_id, demand, cost_attribute)
+                    to_result_df['analysis_direction'] = "To Analysis Zone"
+                    to_result_df['analysis_zone_id'] = analysis_zone_id
+                    to_result_df['opposite_zone_id'] = zone_id
+                    to_result_df['analysis_zone_description'] = analysis_zone_description
+                    self.path_outputs_df = pd.concat([self.path_outputs_df, to_result_df])
+                    # From Driection
+                    from_result_df = self.get_path(analysis_zone_id, zone_id, demand, cost_attribute)
+                    from_result_df['analysis_direction'] = "From Analysis Zone"
+                    from_result_df['analysis_zone_id'] = analysis_zone_id
+                    from_result_df['opposite_zone_id'] = zone_id
+                    from_result_df['analysis_zone_description'] = analysis_zone_description
+                    self.path_outputs_df = pd.concat([self.path_outputs_df, from_result_df])
+                except:
+                    print("    An error occurred skimming {} {}".format(analysis_zone_id, analysis_zone_description))
+            
         # Format output
         self.path_outputs_df['od_pair'] = self.path_outputs_df['origin_zone'].astype(str) + "_" + self.path_outputs_df['dest_zone'].astype(str)
         
         # Export dataframe to CSV
-        path_output_csv_fp = os.path.join(self.run_output_dir, 'path_outputs.csv')
-        self.path_outputs_df.to_csv(path_output_csv_fp, index=False) 
-        print("Exported paths to ", path_output_csv_fp)
+        accessibility_output_csv_fp = os.path.join(self.run_output_dir, 'accessibility_outputs.csv')
+        self.path_outputs_df.to_csv(accessibility_output_csv_fp, index=False) 
+        print("Exported outputs to ", accessibility_output_csv_fp)
         
-        return self.path_outputs_df
+        # Matrix output
+        self.accessibility_matrix_df = self.path_outputs_df.groupby(['analysis_direction','analysis_zone_id','analysis_zone_description','opposite_zone_id','od_pair','origin_zone', 'dest_zone']).agg({'demand':'mean', 'length_metres':'sum'})
+        self.accessibility_matrix_df.reset_index(inplace=True)
+        self.accessibility_matrix_df['travel_time_minutes'] = (self.accessibility_matrix_df['length_metres']/1000)/20*60 # Assumes 20 km per cycle hour speed       
+        self.accessibility_matrix_df = self.accessibility_matrix_df[['analysis_direction','analysis_zone_id','analysis_zone_description','opposite_zone_id','origin_zone', 'dest_zone','demand','length_metres','travel_time_minutes']]
+        
+        # Join WKT geometry
+        zone_geom_df = zones_df[['zone_id','X','Y','WKT']]
+        self.accessibility_matrix_geom_df = pd.merge(
+            self.accessibility_matrix_df, 
+            zone_geom_df, 
+            how='inner', 
+            left_on=['opposite_zone_id'], 
+            right_on = ['zone_id']
+        ) 
+        
+        # Export dataframe to CSV
+        self.accessibility_matrix_output_csv_fp = os.path.join(self.run_output_dir, 'accessibility_matrix_outputs.csv')
+        self.accessibility_matrix_geom_df.to_csv(self.accessibility_matrix_output_csv_fp, index=False) 
+        print("Exported accessibility matrix output to ", self.accessibility_matrix_output_csv_fp)
+        
+        return self.accessibility_matrix_geom_df
+
