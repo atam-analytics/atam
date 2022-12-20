@@ -7,4 +7,4 @@ set python_dir="C:\Users\peter\Documents\GitHub\Python37\python.exe"
 :: Call Model Run
 %python_dir% "%model_dir%\model_run_R0002.py"
 
-pause
+PAUSE
