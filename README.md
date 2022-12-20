@@ -10,7 +10,7 @@
   - **Outputs** – key outputs that ATAM can produce include: (i) volumes by link, (ii) journey times (by route and Origin-Destination **(“OD”)** matrix), (iii) analysis of trips using a particular link (i.e. Select Link Analysis **(“SLA”)**)
 
 - **ATAM is built on open-source tools and does not require proprietary transport**
-  - The core model functionality uses open-source tools - Python, Jupyter notebooks and QGIS (Tableau Public has been used to visualize data as well). No proprietary transport modelling software packages are required.
+  - The core model functionality uses open-source tools - Python and QGIS (Tableau Public has been used to visualize data as well). No proprietary transport modelling software packages are required.
   - Brisbane POC demo/example model code and data is openly available on GitHub (https://github.com/atam-analytics/atam) and serves as an example to implement the ATAM modelling framework in other regions
 
 - **Next steps** – improvements to the Brisbane POC model, develop POC models for other cities globally, build awareness and example use cases, feedback & improvement 
