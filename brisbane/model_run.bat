@@ -1,6 +1,10 @@
 @echo off
-dir="C:\Users\peter\Documents\GitHub\atam-analytics\atam\brisbane"
 
-"C:\Users\peter\Documents\GitHub\Python37\python.exe" "C:\Users\peter\Documents\GitHub\atam-analytics\atam\brisbane\model_run.py"
+:: Set Directories
+set model_dir="C:\Users\peter\Documents\GitHub\atam-analytics\atam\brisbane"
+set python_dir="C:\Users\peter\Documents\GitHub\Python37\python.exe"
+
+:: Call Model Run
+%python_dir% "%model_dir%\model_run_R0002.py"
 
 pause
