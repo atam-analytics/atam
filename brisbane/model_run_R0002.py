@@ -10,7 +10,7 @@ model = Model('R0002')
 model.network_input_file = "links.csv"
 model.zone_input_file = "zones.csv"
 model.connectors_input_file = "connectors.csv"
-model.cycle_demand_input_file = "cycling_demand.csv"
+model.cycle_demand_input_file = "unit_demand.csv"
 print(model.attributes())
 
 # Network
