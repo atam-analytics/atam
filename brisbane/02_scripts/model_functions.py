@@ -1,5 +1,3 @@
-"""{ATAM} Active Transport Modelling Functions"""
-
 # Dependencies
 import os
 import pandas as pd
@@ -29,11 +27,6 @@ class Model:
         self.scripts_dir = os.path.join(self.base_dir, '02_scripts')
         self.output_dir = os.path.join(self.base_dir, '03_outputs')       
         self.run_output_dir = self.safe_create_directory(os.path.join(self.output_dir, run_name))
-
-
-    # Greeting (just for fun)
-    def greet(self):
-        print("Hello, I'm ATAM!")
 
 
     # Print self info
@@ -188,13 +181,14 @@ class Model:
     def assign_demand(self, demand_df):
         
         self.path_outputs_df = pd.DataFrame()
+        print("Assigning demand...")
         
         for index, row in demand_df.iterrows():
             origin_zone = row['origin_zone']
             dest_zone = row['dest_zone']
             demand = row['demand']
             cost_attribute='cost_minutes'
-            print(index, ": orig=", origin_zone, ", dest=", dest_zone, ", demand=",demand)
+            #print(index, ": orig=", origin_zone, ", dest=", dest_zone, ", demand=",demand)
             try:
                 self.get_path(origin_zone, dest_zone, demand, cost_attribute)
                 self.path_outputs_df = pd.concat([self.path_outputs_df, self.last_path_output_df])
@@ -207,7 +201,7 @@ class Model:
         # Export dataframe to CSV
         path_output_csv_fp = os.path.join(self.run_output_dir, 'path_outputs.csv')
         self.path_outputs_df.to_csv(path_output_csv_fp, index=False) 
-        print("Exported paths to ", path_output_csv_fp)
+        print("Assignment complete. Exported paths to ", path_output_csv_fp)
         
         return self.path_outputs_df
         
@@ -350,7 +344,7 @@ class Model:
                 zone_id = row['zone_id']
                 cost_attribute='cost_minutes'
                 demand=0
-                print(index, ": analysis_zone_id=", analysis_zone_id, analysis_zone_description, ", zone_id=", zone_id)
+                #print(index, ": analysis_zone_id=", analysis_zone_id, analysis_zone_description, ", zone_id=", zone_id)
                 try:
                     # To Driection
                     to_result_df = self.get_path(zone_id, analysis_zone_id, demand, cost_attribute)
