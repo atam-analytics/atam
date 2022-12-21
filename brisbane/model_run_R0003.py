@@ -9,7 +9,7 @@ from model_functions import Model
 model = Model('R0003')
 model.zone_input_file = "zones.csv"
 model.network_case = "01_BASE_NET"
-model.cycle_demand_input_file = "unit_demand.csv"
+model.demand_case = "01_BASE_DEMAND"
 print(model.attributes())
 
 # Network
@@ -19,11 +19,11 @@ graph_df = model.build_network_graph(network, connectors)
 print(graph_df.head(-5))
 
 # Get demand matrix
-cycle_demand_df = model.get_demand(model.cycle_demand_input_file)
-print(cycle_demand_df.head(-5))
+unit_demand_df = model.get_demand(model.demand_case)
+print(unit_demand_df.head(-5))
 
 # Assign demand to network
-model.assign_demand(cycle_demand_df)
+model.assign_demand(unit_demand_df)
 
 """
 # Summarise outputs

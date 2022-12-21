@@ -17,8 +17,7 @@ class Model:
         # Input files (set as placeholders)
         self.zone_input_file = ""
         self.network_case = "" 
-        self.walk_demand_input_file = "" 
-        self.cycle_demand_input_file = "" 
+        self.demand_case = ""
         
         # Directory structure
         self.base_dir = os.getcwd()
@@ -36,8 +35,7 @@ class Model:
         print("Outputs directory:", self.output_dir)
         print("Run Outputs directory:", self.run_output_dir)
         print("Network Case:", self.network_case)
-        print("Cycle Demand Inputs:", self.cycle_demand_input_file)
-        print("Walk Demand Inputs:", self.walk_demand_input_file)
+        print("Demand Case:", self.demand_case)
 
         
     # Create directory
@@ -138,8 +136,8 @@ class Model:
 
 
     # Get demand as a pandas DataFrame
-    def get_demand(self, demand_input_fp):
-        self.demand_input_fp = os.path.join(self.input_dir, '03_demand', demand_input_fp)
+    def get_demand(self, demand_case):
+        self.demand_input_fp = os.path.join(self.input_dir, '03_demand', demand_case, "unit_demand.csv")
         print("Demand input file:", self.demand_input_fp)
         self.demand_df = pd.read_csv(self.demand_input_fp)
         self.demand_columns = self.demand_df.columns.tolist()
