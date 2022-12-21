@@ -15,9 +15,8 @@ class Model:
         self.run_name = run_name
         
         # Input files (set as placeholders)
-        self.network_input_file = "" 
-        self.zone_input_file = "" 
-        self.connectors_input_file = "" 
+        self.zone_input_file = ""
+        self.network_case = "" 
         self.walk_demand_input_file = "" 
         self.cycle_demand_input_file = "" 
         
@@ -36,8 +35,7 @@ class Model:
         print("Inputs directory:", self.input_dir)
         print("Outputs directory:", self.output_dir)
         print("Run Outputs directory:", self.run_output_dir)
-        print("Network Inputs:", self.network_input_file)
-        print("Connectors Inputs:", self.connectors_input_file)
+        print("Network Case:", self.network_case)
         print("Cycle Demand Inputs:", self.cycle_demand_input_file)
         print("Walk Demand Inputs:", self.walk_demand_input_file)
 
@@ -56,7 +54,7 @@ class Model:
     def get_network(self):
     
         # Prescribed direction links
-        self.network_input_fp = os.path.join(self.input_dir, '02_network', self.network_input_file)
+        self.network_input_fp = os.path.join(self.input_dir, '02_network', self.network_case, 'links.csv')
         print("Network input file:", self.network_input_fp)
         self.network_inputs_df = pd.read_csv(self.network_input_fp)
         self.network_columns = self.network_inputs_df.columns.tolist()
@@ -81,7 +79,7 @@ class Model:
     def get_connectors(self):
     
         # Prescribed direction connectors
-        self.connectors_input_fp = os.path.join(self.input_dir, '03_connectors', self.connectors_input_file)
+        self.connectors_input_fp = os.path.join(self.input_dir, '02_network', self.network_case, 'connectors.csv')
         print("Connectors input file:", self.connectors_input_fp)
         self.connectors_input_df = pd.read_csv(self.connectors_input_fp)
         
@@ -141,7 +139,7 @@ class Model:
 
     # Get demand as a pandas DataFrame
     def get_demand(self, demand_input_fp):
-        self.demand_input_fp = os.path.join(self.input_dir, '04_demand', demand_input_fp)
+        self.demand_input_fp = os.path.join(self.input_dir, '03_demand', demand_input_fp)
         print("Demand input file:", self.demand_input_fp)
         self.demand_df = pd.read_csv(self.demand_input_fp)
         self.demand_columns = self.demand_df.columns.tolist()
@@ -292,7 +290,7 @@ class Model:
     # Run a batch of select link analyses
     def select_link_analysis(self, paths_file):
         
-        self.sla_input_file = os.path.join(self.input_dir, '05_analysis', 'sla_links.csv')
+        self.sla_input_file = os.path.join(self.input_dir, '04_analysis', 'sla_links.csv')
         sla_input_df = pd.read_csv(self.sla_input_file)
         
         self.all_sla_od_pairs_df = pd.DataFrame()
@@ -327,7 +325,7 @@ class Model:
     def analyse_accessibility(self):
     
         # Zones to analyse accessibility for
-        self.accessibility_zones_file = os.path.join(self.input_dir, '05_analysis', 'accessibility_analysis_zones.csv')
+        self.accessibility_zones_file = os.path.join(self.input_dir, '04_analysis', 'accessibility_analysis_zones.csv')
         accessibility_zones_df = pd.read_csv(self.accessibility_zones_file)
         
         # All zones
